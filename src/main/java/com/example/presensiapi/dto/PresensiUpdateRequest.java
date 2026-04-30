@@ -5,7 +5,6 @@ public class PresensiUpdateRequest {
     private String status;
     private String jamPresensi;
 
-    // Getters and Setters
     public String getStatus() {
         return status;
     }
