@@ -2,6 +2,7 @@ package com.example.presensiapi.dto;
 
 import java.util.List;
 
+@SuppressWarnings("unused")
 public class PageResponse<T> {
     private List<T> content;
     private int pageNumber;

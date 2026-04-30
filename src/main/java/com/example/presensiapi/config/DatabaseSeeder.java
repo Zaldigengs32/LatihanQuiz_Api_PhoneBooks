@@ -1,8 +1,11 @@
 package com.example.presensiapi.config;
 
 import com.example.presensiapi.model.Presensi;
+import com.example.presensiapi.model.User;
 import com.example.presensiapi.repository.PresensiRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.presensiapi.repository.UserRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
@@ -16,16 +19,25 @@ import java.util.Random;
 @Component
 public class DatabaseSeeder implements CommandLineRunner {
 
-    @Autowired
-    private PresensiRepository repository;
+    private static final Logger logger = LoggerFactory.getLogger(DatabaseSeeder.class);
+    private static final String PRESENT_STATUS = "Present";
+    private static final Random random = new Random();
+    
+    private final PresensiRepository repository;
+    private final UserRepository userRepository;
+
+    public DatabaseSeeder(PresensiRepository repository, UserRepository userRepository) {
+        this.repository = repository;
+        this.userRepository = userRepository;
+    }
 
     @Override
-    public void run(String... args) throws Exception {
+    @SuppressWarnings("NullableProblems")
+    public void run(String... args) {
         if (repository.count() == 0) {
-            System.out.println("Tabel Presensi kosong. Sedang men-generate 200 data dummy...");
+            logger.info("Tabel Presensi kosong. Sedang men-generate 200 data dummy...");
 
             List<Presensi> dummyDataList = new ArrayList<>();
-            Random random = new Random();
 
             String[] namaMk = {"Mobile Programming", "Web Programming", "Database System",
                     "Computer Network", "Software Engineering"};
@@ -33,8 +45,8 @@ public class DatabaseSeeder implements CommandLineRunner {
 
             String[] dosenList = {"Bpk. Budi", "Ibu Rina", "Bpk. Andi", "Ibu Siti", "Bpk. Joko"};
 
-            String[] statusOpsi = {"Present", "Present", "Present", "Present", "Present",
-                    "Present", "Absent", "Absent", "Late"};
+            String[] statusOpsi = {PRESENT_STATUS, PRESENT_STATUS, PRESENT_STATUS, PRESENT_STATUS, PRESENT_STATUS,
+                    PRESENT_STATUS, "Absent", "Absent", "Late"};
 
             LocalDate startDate = LocalDate.of(2026, 2, 1);
 
@@ -69,9 +81,27 @@ public class DatabaseSeeder implements CommandLineRunner {
 
             repository.saveAll(dummyDataList);
 
-            System.out.println("Berhasil menyimpan 200 data dummy ke database SQLite!");
+            logger.info("Berhasil menyimpan 200 data dummy ke database SQLite!");
         } else {
-            System.out.println("Data presensi sudah ada, lewati proses Seeding.");
+            logger.info("Data presensi sudah ada, lewati proses Seeding.");
+        }
+        
+        if (userRepository.count() == 0) {
+            logger.info("Tabel User kosong. Generate data user...");
+            
+            List<User> users = new ArrayList<>();
+            
+            User u = new User();
+            u.setMhsNim("0325260031");
+            u.setPassword("123456");
+            u.setMhsName("Hanif");
+            u.setProdi("Manajemen Informatika");
+            
+            users.add(u);
+            
+            userRepository.saveAll(users);
+            
+            logger.info("User berhasil ditambahkan!");
         }
     }
 }
