@@ -24,14 +24,12 @@ public class PhonebookController {
         this.repository = repository;
     }
 
-    // Read All
     @GetMapping
     public ResponseEntity<DtoResponse> getAll() {
         List<Phonebook> data = repository.findAll();
         return ResponseEntity.ok(new DtoResponse(200, "Success", data));
     }
 
-    // Read by Id
     @GetMapping("/{id}")
     public ResponseEntity<DtoResponse> getById(@PathVariable Long id) {
         Optional<Phonebook> phonebook = repository.findById(id);
@@ -42,7 +40,6 @@ public class PhonebookController {
                 .body(new DtoResponse(404, NOT_FOUND_MSG + id, null));
     }
 
-    // Create
     @PostMapping
     public ResponseEntity<DtoResponse> create(@RequestBody PhonebookRequest request) {
         if (request.getStatus() != null && !request.getStatus().equals("1") && !request.getStatus().equals("2")) {
@@ -67,7 +64,6 @@ public class PhonebookController {
                 .body(new DtoResponse(201, "Contact created successfully", saved));
     }
 
-    // Update
     @PutMapping("/{id}")
     public ResponseEntity<DtoResponse> update(@PathVariable Long id, @RequestBody PhonebookRequest request) {
         Optional<Phonebook> existing = repository.findById(id);
@@ -96,7 +92,6 @@ public class PhonebookController {
         return ResponseEntity.ok(new DtoResponse(200, "Contact updated successfully", updated));
     }
 
-    // Delete
     @DeleteMapping("/{id}")
     public ResponseEntity<DtoResponse> delete(@PathVariable Long id) {
         if (!repository.existsById(id)) {
