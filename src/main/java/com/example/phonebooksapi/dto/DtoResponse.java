@@ -1,4 +1,4 @@
-package com.example.presensiapi.dto;
+package com.example.phonebooksapi.dto;
 
 @SuppressWarnings("unused")
 public class DtoResponse {

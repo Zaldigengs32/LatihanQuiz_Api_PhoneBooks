@@ -1,4 +1,4 @@
-package com.example.presensiapi.config;
+package com.example.phonebooksapi.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
