@@ -16,7 +16,7 @@ import java.util.Optional;
 @CrossOrigin(origins = "*")
 public class PhonebookController {
 
-    private static final String NOT_FOUND_MSG = "Contact not found with id: ";
+    private static final String NOT_FOUND_MSG = "Kontak tidak ditemukan dengan id: ";
 
     private final PhonebookRepository repository;
 
@@ -27,14 +27,14 @@ public class PhonebookController {
     @GetMapping
     public ResponseEntity<DtoResponse> getAll() {
         List<Phonebook> data = repository.findAll();
-        return ResponseEntity.ok(new DtoResponse(200, "Success", data));
+        return ResponseEntity.ok(new DtoResponse(200, "Berhasil", data));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<DtoResponse> getById(@PathVariable Long id) {
         Optional<Phonebook> phonebook = repository.findById(id);
         if (phonebook.isPresent()) {
-            return ResponseEntity.ok(new DtoResponse(200, "Success", phonebook.get()));
+            return ResponseEntity.ok(new DtoResponse(200, "Berhasil", phonebook.get()));
         }
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(new DtoResponse(404, NOT_FOUND_MSG + id, null));
@@ -44,11 +44,11 @@ public class PhonebookController {
     public ResponseEntity<DtoResponse> create(@RequestBody PhonebookRequest request) {
         if (request.getStatus() != null && !request.getStatus().equals("1") && !request.getStatus().equals("2")) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new DtoResponse(400, "Status must be '1' or '2'", null));
+                    .body(new DtoResponse(400, "Status harus '1' atau '2'", null));
         }
         if (request.getPhoneNumber() != null && !request.getPhoneNumber().matches("\\d+")) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new DtoResponse(400, "Phone number must contain digits only", null));
+                    .body(new DtoResponse(400, "Nomor telepon hanya boleh angka", null));
         }
 
         Phonebook phonebook = new Phonebook();
@@ -61,7 +61,7 @@ public class PhonebookController {
 
         Phonebook saved = repository.save(phonebook);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(new DtoResponse(201, "Contact created successfully", saved));
+                .body(new DtoResponse(201, "Kontak berhasil ditambahkan", saved));
     }
 
     @PutMapping("/{id}")
@@ -73,11 +73,11 @@ public class PhonebookController {
         }
         if (request.getStatus() != null && !request.getStatus().equals("1") && !request.getStatus().equals("2")) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new DtoResponse(400, "Status must be '1' or '2'", null));
+                    .body(new DtoResponse(400, "Status harus '1' atau '2'", null));
         }
         if (request.getPhoneNumber() != null && !request.getPhoneNumber().matches("\\d+")) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(new DtoResponse(400, "Phone number must contain digits only", null));
+                    .body(new DtoResponse(400, "Nomor telepon hanya boleh angka", null));
         }
 
         Phonebook phonebook = existing.get();
@@ -89,7 +89,7 @@ public class PhonebookController {
         phonebook.setAddress(request.getAddress());
 
         Phonebook updated = repository.save(phonebook);
-        return ResponseEntity.ok(new DtoResponse(200, "Contact updated successfully", updated));
+        return ResponseEntity.ok(new DtoResponse(200, "Kontak berhasil diperbarui", updated));
     }
 
     @DeleteMapping("/{id}")
@@ -99,6 +99,6 @@ public class PhonebookController {
                     .body(new DtoResponse(404, NOT_FOUND_MSG + id, null));
         }
         repository.deleteById(id);
-        return ResponseEntity.ok(new DtoResponse(200, "Contact deleted successfully", null));
+        return ResponseEntity.ok(new DtoResponse(200, "Kontak berhasil dihapus", null));
     }
 }
